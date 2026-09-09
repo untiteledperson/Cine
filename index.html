@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cine</title>
+<link rel="icon" type="image/svg+xml" href="favicon32.svg">
+<meta name="theme-color" content="#8b5cf6">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="spinnerOverlay"><div class="spinner"></div></div>
+<div id="declinedBlocker"></div>
+<div id="declinedLogo"></div>
+<button id="menuBtn" onclick="toggleMenu()" title="Open menu" aria-label="Open menu"><i data-lucide="menu"></i></button>
+<div id="overlay" onclick="closeMenu()"></div>
+
+<aside id="desktopSidebar" aria-label="Main navigation">
+  <div class="sidebar-logo" onclick="nav('trending')" role="button" tabindex="0" aria-label="Cine home">
+    <img src="./favicon32.svg?v=2" alt="Cine logo" width="34" height="34">
+  </div>
+  <nav>
+    <button data-sidebar-nav="trending" onclick="nav('trending')" title="Home" aria-label="Home"><i data-lucide="house"></i></button>
+    <button onclick="focusSearch()" title="Search" aria-label="Search"><i data-lucide="search"></i></button>
+    <button data-sidebar-nav="continue" onclick="nav('continue')" title="Continue watching" aria-label="Continue watching"><i data-lucide="play-circle"></i></button>
+    <button data-sidebar-nav="series" onclick="nav('series')" title="Series" aria-label="Series"><i data-lucide="tv"></i></button>
+    <button data-sidebar-nav="movies" onclick="nav('movies')" title="Movies" aria-label="Movies"><i data-lucide="film"></i></button>
+    <button data-sidebar-nav="categories" onclick="nav('categories')" title="Categories" aria-label="Categories"><i data-lucide="grid-2x2"></i></button>
+    <button data-sidebar-nav="infinite" onclick="nav('infinite')" title="Infinite" aria-label="Infinite"><i data-lucide="infinity"></i></button>
+  </nav>
+</aside>
+
+<div id="menu">
+  <button onclick="nav('trending')"><i data-lucide="house"></i><span>Home</span></button>
+  <button onclick="nav('continue')"><i data-lucide="play-circle"></i><span>Continue watching</span></button>
+  <button onclick="nav('movies')"><i data-lucide="film"></i><span>Movies</span></button>
+  <button onclick="nav('series')"><i data-lucide="tv"></i><span>Series</span></button>
+  <button onclick="nav('categories')"><i data-lucide="grid-3x3"></i><span>Categories</span></button>
+  <button onclick="nav('infinite')"><i data-lucide="infinity"></i><span>Infinite</span></button>
+</div>
+
+<!-- BROWSE PAGE -->
+<div id="browsePage" class="page">
+  <header>
+    <h1 onclick="nav('trending')"><span>Cine</span></h1>
+    <div class="search-wrap">
+      <input id="search" placeholder="Search movies and series…">
+      <button onclick="search()" title="Search" aria-label="Search"><i data-lucide="search"></i></button>
+    </div>
+  </header>
+  <div id="content"></div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="detailPage" class="page">
+  <header>
+    <h1 onclick="nav('trending')"><span>Cine</span></h1>
+    <div class="search-wrap">
+      <input id="search2" placeholder="Search movies and series…">
+      <button onclick="search2()" title="Search" aria-label="Search"><i data-lucide="search"></i></button>
+    </div>
+  </header>
+
+  <div id="detailHero">
+    <img id="detailBackdrop" src="" alt="">
+    <div id="detailHeroOverlay"></div>
+    <div id="detailHeroContent">
+      <img id="detailPoster" src="" alt="">
+      <div id="detailMeta">
+        <div id="detailTopRow">
+          <div>
+            <div id="detailTitle"></div>
+            <div id="detailTagline"></div>
+            <div id="detailBadges"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detailBody">
+    <p id="detailOverview"></p>
+    <button id="moviePlayBtn" onclick="goToPlayer()">▶ Play movie</button>
+    <div id="tvPickerDetail">
+      <div>
+        <div class="picker-section-label">Season</div>
+        <div class="picker-scroll" id="seasonBtns"></div>
+      </div>
+      <div>
+        <div class="picker-section-label">Episode</div>
+        <div class="picker-scroll" id="episodeBtns"></div>
+      </div>
+        <button id="tvPlayBtn" onclick="goToPlayer()">▶ Play episode</button>
+    </div>
+  </div>
+</div>
+
+<div id="ageVerificationModal" class="age-verification-modal">
+  <div class="age-verification-box">
+    <div class="age-verification-badge" id="ageVerificationBadge">16+</div>
+    <p class="age-verification-eyebrow">CONTENT NOTICE</p>
+    <h2>Age verification</h2>
+    <p id="ageVerificationText">This title contains mature content. Confirm your age to continue watching.</p>
+    <div class="age-verification-actions">
+      <button class="auth-primary" onclick="confirmAgeVerification()">I am 16 or older</button>
+      <button class="auth-secondary" onclick="cancelAgeVerification()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<button id="backToTop" onclick="scrollToTop()" title="Back to top" aria-label="Back to top"><i data-lucide="arrow-up"></i></button>
+
+<!-- PLAYER PAGE -->
+<div id="playerPage" class="page">
+  <div id="playerHeader">
+    <div id="playerTitle" onclick="goBackToDetail()" role="button" tabindex="0" aria-label="Back to title" onkeydown="if(event.key==='Enter'||event.key===' ')goBackToDetail()"></div>
+  </div>
+  <div id="playerWrap">
+    <div id="playerFrame"></div>
+  </div>
+</div>
+
+<!-- AUTOPLAY OVERLAY -->
+<div id="autoplayOverlay">
+  <div class="autoplay-box">
+    <div class="autoplay-label">Next episode</div>
+    <div class="autoplay-btns">
+      <button class="autoplay-play-btn" onclick="autoplayNow()">▶ Play now</button>
+      <button class="autoplay-cancel-btn" onclick="autoplayCancel()">Cancel</button>
+    </div>
+    <div class="autoplay-title" id="autoplayTitle"></div>
+    <div class="autoplay-countdown" id="autoplayRing">
+      <span id="autoplayCount">5</span>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="script.js"></script>
+</body>
+</html>
